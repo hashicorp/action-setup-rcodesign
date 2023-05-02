@@ -1,0 +1,31 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
+name: "Setup rcodesign"
+author: "HashiCorp"
+description: "Install rcodesign"
+
+branding:
+  color: "gray-dark"
+  icon: "package"
+
+inputs:
+  github-token:
+    description: "GitHub token for gh(1) to interact with GitHub API"
+    required: true
+  install-dir:
+    description: "Where the tool will be installed; this directory will be added to GITHUB_PATH.  Default: ./.bob/tools"
+  version:
+    description: "Version of rcodesign to install"
+    default: "0.22.0"
+
+runs:
+  using: composite
+  steps:
+    - name: Install rcodesign
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        DEST_DIR: ${{ inputs.install-dir }}
+        VERSION: ${{ inputs.version }}
+      run: .github/scripts/install-rcodesign.sh

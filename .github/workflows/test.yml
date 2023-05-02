@@ -1,0 +1,34 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
+name: Test Installer
+on:
+  push:
+
+permissions:
+  contents: read
+
+jobs:
+  test-install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+      - name: Install
+        uses: ./
+        with:
+          # needed for installer to run gh tool
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check Default Installation Path
+        run: |
+          exp_dir="${PWD}/.bob/tools"
+          if ! grep "$exp_dir" <<< "$PATH" ; then
+            echo "Expected $exp_dir in PATH but it's absent." 1>&2
+            exit 1
+          fi
+      - name: Check tool can be run
+        run: rcodesign --version
+      - name: Run Shellcheck
+        uses: docker://koalaman/shellcheck:stable
+        with:
+          # running the step in a container mounts the workspace as below
+          args: "/github/workspace/.github/scripts/install-rcodesign.sh"
