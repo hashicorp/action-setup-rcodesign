@@ -29,7 +29,8 @@ runs:
         DEST_DIR: ${{ inputs.install-dir }}
         VERSION: ${{ inputs.version }}
       run: |
-        "${GITHUB_ACTION}/.github/scripts/install-rcodesign.sh"
+        /bin/ls -lR "$GITHUB_ACTION_PATH"
+        "${GITHUB_ACTION_PATH}/.github/scripts/install-rcodesign.sh"
         echo "exit status $?"
         echo ==== after
         echo "$GITHUB_PATH"
