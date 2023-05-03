@@ -11,6 +11,9 @@ permissions:
 jobs:
   test-install:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dest_dir: [ '', '/tmp/rcodesign' ]
     steps:
       - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
       - name: Install
@@ -18,15 +21,24 @@ jobs:
         with:
           # needed for installer to run gh tool
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          install-dir: ${{ matrix.dest_dir }}
       - name: Check Default Installation Path
         run: |
-          exp_dir="${PWD}/.bob/tools"
+          case "${{ matrix.dest_dir }}" in
+            '') exp_dir="${PWD}/.bob/tools" ;;
+            *) exp_dir="${{ matrix.dest_dir }}" ;;
+          esac
           if ! grep "$exp_dir" <<< "$PATH" ; then
             echo "Expected $exp_dir in PATH but it's absent." 1>&2
             exit 1
           fi
       - name: Check tool can be run
         run: rcodesign --version
+
+  script-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
       - name: Run Shellcheck
         uses: docker://koalaman/shellcheck:stable
         with:

@@ -28,24 +28,4 @@ runs:
         GH_TOKEN: ${{ inputs.github-token }}
         DEST_DIR: ${{ inputs.install-dir }}
         VERSION: ${{ inputs.version }}
-      run: |
-        /bin/ls -lR "$GITHUB_ACTION_PATH"
-        "${GITHUB_ACTION_PATH}/install-rcodesign.sh"
-        echo "exit status $?"
-        echo ==== after
-        echo "$GITHUB_PATH"
-        cat "$GITHUB_PATH"
-        echo ====
-    - name: Check New PATH
-      shell: bash
-      run: |
-        set -x
-        /usr/bin/env | grep '^PATH='
-    - name: Run the tool
-      shell: bash
-      run: |
-        rcodesign --version
-    - name: Abort Abort Abort
-      shell: bash
-      run: |
-        exit 1
+      run: "${GITHUB_ACTION_PATH}/install-rcodesign.sh"
