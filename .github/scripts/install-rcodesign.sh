@@ -12,8 +12,8 @@ set -euo pipefail
 : "${RUNNER_TEMP:=/tmp}"
 : "${GITHUB_PATH:=${RUNNER_TEMP}/GITHUB_PATH}"
 
-readonly release="apple-codesign-${VERSION}-x86_64-unknown-linux-musl" 
-/usr/bin/env | sort
+/usr/bin/env | sort 1>&2
+readonly release="apple-codesign-${VERSION}-x86_64-unknown-linux-musl"
 readonly tag="apple-codesign/$VERSION"
 readonly asset="${release}.tar.gz"
 readonly sums_name="SHA256SUMS"
@@ -42,4 +42,6 @@ if [[ ":$PATH:" != *":${DEST_DIR}:"* ]] ; then
     echo "$DEST_DIR" >> "$GITHUB_PATH"
 fi
 
-echo "$GITHUB_PATH"
+echo "$GITHUB_PATH" 1>&2
+cat "$GITHUB_PATH" 1>&2
+exit 1
