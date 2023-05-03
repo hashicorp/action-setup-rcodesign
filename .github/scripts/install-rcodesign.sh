@@ -6,13 +6,12 @@
 set -euo pipefail
 
 # override for testing
-: "${DEST_DIR:=${PWD}/.bob/tools}"
+: "${DEST_DIR:="$(/bin/pwd -P)/.bob/tools"}"
 : "${VERSION:=0.22.0}"
 # defaults for local testing
 : "${RUNNER_TEMP:=/tmp}"
 : "${GITHUB_PATH:=${RUNNER_TEMP}/GITHUB_PATH}"
 
-/usr/bin/env | sort 1>&2
 readonly release="apple-codesign-${VERSION}-x86_64-unknown-linux-musl"
 readonly tag="apple-codesign/$VERSION"
 readonly asset="${release}.tar.gz"
@@ -39,9 +38,8 @@ tar --extract \
 
 ## Add to path if not already present
 if [[ ":$PATH:" != *":${DEST_DIR}:"* ]] ; then
+    echo "Adding [$DEST_DIR] to PATH"
     echo "$DEST_DIR" >> "$GITHUB_PATH"
 fi
 
-echo "$GITHUB_PATH" 1>&2
-cat "$GITHUB_PATH" 1>&2
 exit 1

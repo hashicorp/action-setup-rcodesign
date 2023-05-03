@@ -29,12 +29,6 @@ runs:
         DEST_DIR: ${{ inputs.install-dir }}
         VERSION: ${{ inputs.version }}
       run: |
-        set -x
-        /usr/bin/env | sort
-        echo ==== before
-        echo "$GITHUB_PATH"
-        cat "$GITHUB_PATH"
-        echo ====
         bash -x .github/scripts/install-rcodesign.sh
         echo "exit status $?"
         echo ==== after
@@ -46,6 +40,10 @@ runs:
       run: |
         set -x
         /usr/bin/env | grep '^PATH='
+    - name: Run the tool
+      shell: bash
+      run: |
+        rcodesign --version
     - name: Abort Abort Abort
       shell: bash
       run: |
