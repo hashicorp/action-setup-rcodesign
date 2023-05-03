@@ -35,14 +35,12 @@ runs:
         echo "$GITHUB_PATH"
         cat "$GITHUB_PATH"
         echo ====
-        .github/scripts/install-rcodesign.sh > script-output 2>&1
+        bash -x .github/scripts/install-rcodesign.sh
         echo "exit status $?"
         echo ==== after
         echo "$GITHUB_PATH"
         cat "$GITHUB_PATH"
         echo ====
-        /bin/ls -l script-output
-        cat script-output
     - name: Check New PATH
       shell: bash
       run: |
