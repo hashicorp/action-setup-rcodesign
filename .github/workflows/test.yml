@@ -31,4 +31,4 @@ jobs:
         uses: docker://koalaman/shellcheck:stable
         with:
           # running the step in a container mounts the workspace as below
-          args: "/github/workspace/.github/scripts/install-rcodesign.sh"
+          args: "/github/workspace/install-rcodesign.sh"

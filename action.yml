@@ -30,7 +30,7 @@ runs:
         VERSION: ${{ inputs.version }}
       run: |
         /bin/ls -lR "$GITHUB_ACTION_PATH"
-        "${GITHUB_ACTION_PATH}/.github/scripts/install-rcodesign.sh"
+        "${GITHUB_ACTION_PATH}/install-rcodesign.sh"
         echo "exit status $?"
         echo ==== after
         echo "$GITHUB_PATH"

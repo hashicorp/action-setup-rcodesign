@@ -6,8 +6,7 @@
 set -euo pipefail
 
 # override for testing
-#: "${DEST_DIR:="$(/bin/pwd -P)/.bob/tools"}"
-[ -n "$DEST_DIR" ] || DEST_DIR="$(/bin/pwd -P)/.bob/tools"
+: "${DEST_DIR:="$(/bin/pwd -P)/.bob/tools"}"
 : "${VERSION:=0.22.0}"
 # defaults for local testing
 : "${RUNNER_TEMP:=/tmp}"
@@ -42,7 +41,3 @@ if [[ ":$PATH:" != *":${DEST_DIR}:"* ]] ; then
     echo "Adding [$DEST_DIR] to PATH"
     echo "$DEST_DIR" >> "$GITHUB_PATH"
 fi
-
-echo mark 1
-exit 1
-echo mark 2
