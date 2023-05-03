@@ -31,14 +31,16 @@ runs:
       run: |
         set -x
         /usr/bin/env | sort
-        echo ====
-        /bin/ls -l .github/scripts/
-        echo ====
-        .github/scripts/install-rcodesign.sh
-        echo ====
+        echo ==== before
         echo "$GITHUB_PATH"
         cat "$GITHUB_PATH"
         echo ====
+        .github/scripts/install-rcodesign.sh > script-output 2>&1
+        echo ==== after
+        echo "$GITHUB_PATH"
+        cat "$GITHUB_PATH"
+        echo ====
+        cat script-output
     - name: Check New PATH
       shell: bash
       run: |
