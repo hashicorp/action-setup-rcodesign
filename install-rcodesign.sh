@@ -6,7 +6,7 @@
 set -euo pipefail
 
 # override for testing
-: "${DEST_DIR:=${PWD}/.bob/tools}"
+: "${DEST_DIR:="$(/bin/pwd -P)/.bob/tools"}"
 : "${VERSION:=0.22.0}"
 # defaults for local testing
 : "${RUNNER_TEMP:=/tmp}"
@@ -38,5 +38,6 @@ tar --extract \
 
 ## Add to path if not already present
 if [[ ":$PATH:" != *":${DEST_DIR}:"* ]] ; then
+    echo "Adding [$DEST_DIR] to PATH"
     echo "$DEST_DIR" >> "$GITHUB_PATH"
 fi

@@ -28,4 +28,4 @@ runs:
         GH_TOKEN: ${{ inputs.github-token }}
         DEST_DIR: ${{ inputs.install-dir }}
         VERSION: ${{ inputs.version }}
-      run: .github/scripts/install-rcodesign.sh
+      run: "${GITHUB_ACTION_PATH}/install-rcodesign.sh"
