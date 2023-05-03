@@ -29,6 +29,7 @@ runs:
         DEST_DIR: ${{ inputs.install-dir }}
         VERSION: ${{ inputs.version }}
       run: |
+        bash --version
         bash -x .github/scripts/install-rcodesign.sh
         echo "exit status $?"
         echo ==== after
