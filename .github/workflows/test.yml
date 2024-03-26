@@ -10,11 +10,35 @@ permissions:
 
 jobs:
   test-install:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.target.runner }}
     strategy:
       matrix:
         dest_dir: [ '', '/tmp/rcodesign' ]
+        target:
+          - { runner: 'ubuntu-latest' }
+          - { runner: 'macos-latest' }
+          # no GH-hosted ARM64 Mac runners available yet
+          #- { runner: ['self-hosted', 'ondemand', 'macos', 'arm64'] }
     steps:
+
+      # for local act runs, install gh
+      - name: Install gh
+        if: ${{ env.ACT }}
+        env:
+          ARCHIVE: "https://github.com/cli/cli/releases/download/v2.45.0/gh_2.45.0_linux_amd64.tar.gz"
+        run: |
+          mkdir /tmp/gh
+          cd /tmp/gh
+          curl -LsSo gh.tar.gz "$ARCHIVE"
+          tar zxf gh.tar.gz
+          cp gh_*/bin/gh .
+          pwd >> "$GITHUB_PATH"
+      - name: Verify gh
+        if: ${{ env.ACT }}
+        run: |
+          which gh
+          gh --version
+
       - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
       - name: Install
         uses: ./
