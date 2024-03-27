@@ -66,5 +66,5 @@ jobs:
       - name: Run Shellcheck
         uses: docker://koalaman/shellcheck:stable
         with:
-          # running the step in a container mounts the workspace as below
-          args: "/github/workspace/install-rcodesign.sh"
+          # inside the container, the working directory will be set to the mounted github workspace
+          args: "install-rcodesign.sh"
