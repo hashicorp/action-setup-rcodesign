@@ -19,6 +19,7 @@ os=linux
 case "$(uname -m)" in
     x86_64) ;;
     amd64) arch=x86_64 ;;
+    arm64) arch=aarch64 ;;
     *) echo "$(uname -m): unsupported machine architecture" 1>&2 ; exit 1 ;;
 esac
 case "$(uname -s)" in
