@@ -12,12 +12,37 @@ set -euo pipefail
 : "${RUNNER_TEMP:=/tmp}"
 : "${GITHUB_PATH:=${RUNNER_TEMP}/GITHUB_PATH}"
 
-readonly release="apple-codesign-${VERSION}-x86_64-unknown-linux-musl"
+declare -a cksum_command=( )
+
+arch=x86_64
+os=linux
+case "$(uname -m)" in
+    x86_64) ;;
+    amd64) arch=x86_64 ;;
+    *) echo "$(uname -m): unsupported machine architecture" 1>&2 ; exit 1 ;;
+esac
+case "$(uname -s)" in
+    Darwin)
+        # only used for selecting rcodesign release artifact
+        os=apple-darwin
+        cksum_command=( 'shasum' '-a' '256' )
+        ;;
+    Linux)
+        # only used for selecting rcodesign release artifact
+        os=unknown-linux-musl
+        cksum_command=( 'sha256sum' )
+        ;;
+    *) echo "$(uname -s): unsupported operating system" 1>&2 ; exit 1 ;;
+esac
+echo "==> installing rcodesign for arch=${arch} and os=${os}"
+
+readonly release="apple-codesign-${VERSION}-${arch}-${os}"
 readonly tag="apple-codesign/$VERSION"
 readonly asset="${release}.tar.gz"
 readonly sums_name="SHA256SUMS"
 
 cd "$RUNNER_TEMP"
+echo "Fetching release artifact: $release"
 
 # can add --clobber for convenience in local testing
 gh release download --repo=github.com/indygreg/apple-platform-rs "$tag" --pattern "$asset"
@@ -27,7 +52,8 @@ if [ -z "$checksums" ]; then
     echo "$sums_name: no checksum found for asset $asset" 1>&2
     exit 1
 fi
-sha256sum --quiet --strict --check <<<"$checksums"
+
+"${cksum_command[@]}" --quiet --strict --check <<<"$checksums"
 
 mkdir -p "$DEST_DIR"
 tar --extract \
