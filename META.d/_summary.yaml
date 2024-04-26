@@ -1,0 +1,11 @@
+schema: 1.1
+
+partition: release-engineering
+category: github-action
+
+summary:
+  name: actions-go-build
+  owner: team-selfmanaged-releng
+  description: GitHub action to setup rcodesign for darwin artifact signing
+  visibility: external
+  auth_methods: none
